@@ -22,18 +22,13 @@ public class PlayerController : MonoBehaviour
 
     void walkHandler()
     {
-        rb.velocity = new Vector3(0, rb.velocity.y, 0);
 
         float distance = walkSpeed * Time.deltaTime;
-
         float horizontalAxis = Input.GetAxis("Horizontal");
-
         float verticalAxis = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(distance * horizontalAxis, 0f, verticalAxis * distance);
-
+        Vector3 movement = new Vector3(horizontalAxis, 0f, verticalAxis).normalized * distance;
         Vector3 currentPosition = transform.position;
-
         Vector3 newPosition = currentPosition + movement;
 
         rb.MovePosition(newPosition);
