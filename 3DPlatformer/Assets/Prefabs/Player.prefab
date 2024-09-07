@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 195733136414409729}
   - component: {fileID: 1313291081949836428}
   - component: {fileID: 452847458515270804}
+  - component: {fileID: 8999489258103321467}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -92,7 +93,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5178815756297264906}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 075c19bba8b8a6544b5bfab07b015676, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -133,3 +134,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8999489258103321467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178815756297264906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f67a4200bb266469917addb8fd1865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 8
+  jumpSpeed: 7
