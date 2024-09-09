@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8999489258103321467}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,3 +149,4 @@ MonoBehaviour:
   walkSpeed: 8
   jumpSpeed: 7
   maxJumps: 2
+  coinAudioSource: {fileID: 0}

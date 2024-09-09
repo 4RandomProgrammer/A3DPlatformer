@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
         walkHandler();
 
         jumpHandler();
+
+        print(rb.velocity);
     }
 
     void walkHandler()
@@ -97,9 +99,16 @@ public class PlayerController : MonoBehaviour
         {
             print("Grabbing a Coin");
 
+            GameManager.instance.IncreaseScore(1);
+
             coinAudioSource.Play();
 
             Destroy(collider.gameObject);
+        }
+
+        else if (collider.gameObject.tag == "Enemy")
+        {
+            print("game over");
         }
 
     }
