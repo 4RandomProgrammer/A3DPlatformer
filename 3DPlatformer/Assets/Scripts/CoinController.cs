@@ -13,8 +13,5 @@ public class CoinController : MonoBehaviour
         transform.Rotate(Vector3.up * rotationAngle, Space.World);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
+    
 }

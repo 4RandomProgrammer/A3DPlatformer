@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float walkSpeed = 8f;
+    public float walkSpeed = 25f;
     public float jumpSpeed = 7f;
-    bool hasJumped = true;
+    public int maxJumps = 2;
+    bool pressedJump = true;
+    int jumpCounter = 0;
     Rigidbody rb;
     Collider coll;
+    public AudioSource coinAudioSource;
 
     void Start()
     {
@@ -41,23 +44,31 @@ public class PlayerController : MonoBehaviour
     {
         float jumpAxis = Input.GetAxis("Jump");
         bool isGrounded = checkGrounded();
-
+        
         if (jumpAxis > 0f)
-        {   
-            if (!hasJumped)
+        {
+            if (!pressedJump && (isGrounded || jumpCounter < maxJumps))
             {
-                hasJumped = true;
 
                 Vector3 jumpVector = new Vector3(0F, jumpSpeed, 0f);
 
                 rb.velocity += jumpVector;
 
+                jumpCounter += 1;
+               
+                pressedJump = true;
+               
             }
             
         } 
         else
         {
-            hasJumped = false;
+            pressedJump = false;
+        }
+
+        if (isGrounded)
+        {
+            jumpCounter = 0;
         }
     }
 
@@ -78,5 +89,18 @@ public class PlayerController : MonoBehaviour
         bool grounded4 = Physics.Raycast(corner4, Vector3.down, 0.01f);
 
         return (grounded1 || grounded2|| grounded3 || grounded4);
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.tag == "Coin")
+        {
+            print("Grabbing a Coin");
+
+            coinAudioSource.Play();
+
+            Destroy(collider.gameObject);
+        }
+
     }
 }
