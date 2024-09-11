@@ -24,8 +24,6 @@ public class PlayerController : MonoBehaviour
         walkHandler();
 
         jumpHandler();
-
-        print(rb.velocity);
     }
 
     void walkHandler()
@@ -111,5 +109,9 @@ public class PlayerController : MonoBehaviour
             print("game over");
         }
 
+        else if (collider.gameObject.tag == "Goal")
+        {
+            print("next level");
+        }
     }
 }
