@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,11 +13,14 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Collider coll;
     public AudioSource coinAudioSource;
+    public HudManager hud;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+
+        hud.Refresh();
     }
     
     void Update()
@@ -93,11 +97,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        print(collider.gameObject.tag);
         if (collider.gameObject.tag == "Coin")
         {
             print("Grabbing a Coin");
 
             GameManager.instance.IncreaseScore(1);
+
+            hud.Refresh();
 
             coinAudioSource.Play();
 
@@ -106,12 +113,15 @@ public class PlayerController : MonoBehaviour
 
         else if (collider.gameObject.tag == "Enemy")
         {
+
             print("game over");
+            SceneManager.LoadScene("GameOver");
         }
 
         else if (collider.gameObject.tag == "Goal")
         {
             print("next level");
+            GameManager.instance.IncreaseLevel();
         }
     }
 }
