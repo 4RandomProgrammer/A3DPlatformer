@@ -12,8 +12,8 @@ public class GameOverUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        score.text = GameManager.instance.score.ToString();
-        highScore.text = GameManager.instance.highScore.ToString();
+        score.text =  "Score: " + GameManager.instance.score.ToString();
+        highScore.text = "High score: " + GameManager.instance.highScore.ToString();
     }
 
     // Update is called once per frame

@@ -114,7 +114,6 @@ public class PlayerController : MonoBehaviour
         else if (collider.gameObject.tag == "Enemy")
         {
 
-            print("game over");
             SceneManager.LoadScene("GameOver");
         }
 
