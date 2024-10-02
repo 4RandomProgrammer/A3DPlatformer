@@ -8,21 +8,23 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 25f;
     public float jumpSpeed = 7f;
     public int maxJumps = 2;
-    bool pressedJump = true;
-    int jumpCounter = 0;
-    Rigidbody rb;
-    Collider coll;
     public AudioSource coinAudioSource;
     public HudManager hud;
+    float errorMargin = 0.01f;
+    bool hasPressedJump = true;
+    int jumpCounter = 0;
+    Rigidbody rigidBody;
+    Collider collisionDetection;
+    
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
+        rigidBody = GetComponent<Rigidbody>();
+        collisionDetection = GetComponent<Collider>();
 
         hud.Refresh();
     }
-    
+
     void Update()
     {
         walkHandler();
@@ -41,33 +43,33 @@ public class PlayerController : MonoBehaviour
         Vector3 currentPosition = transform.position;
         Vector3 newPosition = currentPosition + movement;
 
-        rb.MovePosition(newPosition);
+        rigidBody.MovePosition(newPosition);
     }
 
     void jumpHandler()
     {
         float jumpAxis = Input.GetAxis("Jump");
         bool isGrounded = checkGrounded();
-        
+
         if (jumpAxis > 0f)
         {
-            if (!pressedJump && (isGrounded || jumpCounter < maxJumps))
+            if (!hasPressedJump && (isGrounded || jumpCounter < maxJumps))
             {
 
                 Vector3 jumpVector = new Vector3(0F, jumpSpeed, 0f);
 
-                rb.velocity += jumpVector;
+                rigidBody.velocity += jumpVector;
 
                 jumpCounter += 1;
-               
-                pressedJump = true;
-               
+
+                hasPressedJump = true;
+
             }
-            
-        } 
+
+        }
         else
         {
-            pressedJump = false;
+            hasPressedJump = false;
         }
 
         if (isGrounded)
@@ -78,21 +80,21 @@ public class PlayerController : MonoBehaviour
 
     bool checkGrounded()
     {
-        float sizeX = coll.bounds.size.x;
-        float sizeY = coll.bounds.size.y;
-        float sizeZ = coll.bounds.size.z;
+        float sizeX = collisionDetection.bounds.size.x;
+        float sizeY = collisionDetection.bounds.size.y;
+        float sizeZ = collisionDetection.bounds.size.z;
 
-        Vector3 corner1 = transform.position + new Vector3(sizeX/2, -sizeY/2 + 0.01f, sizeZ/2);
-        Vector3 corner2 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + 0.01f, sizeZ / 2);
-        Vector3 corner3 = transform.position + new Vector3(sizeX / 2, -sizeY / 2 + 0.01f, -sizeZ / 2);
-        Vector3 corner4 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + 0.01f, -sizeZ / 2);
+        Vector3 corner1 = transform.position + new Vector3(sizeX / 2, -sizeY / 2 + errorMargin, sizeZ / 2);
+        Vector3 corner2 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + errorMargin, sizeZ / 2);
+        Vector3 corner3 = transform.position + new Vector3(sizeX / 2, -sizeY / 2 + errorMargin, -sizeZ / 2);
+        Vector3 corner4 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + errorMargin, -sizeZ / 2);
 
-        bool grounded1 = Physics.Raycast(corner1, Vector3.down, 0.01f);
-        bool grounded2 = Physics.Raycast(corner2, Vector3.down, 0.01f);
-        bool grounded3 = Physics.Raycast(corner3, Vector3.down, 0.01f);
-        bool grounded4 = Physics.Raycast(corner4, Vector3.down, 0.01f);
+        bool grounded1 = Physics.Raycast(corner1, Vector3.down, errorMargin);
+        bool grounded2 = Physics.Raycast(corner2, Vector3.down, errorMargin);
+        bool grounded3 = Physics.Raycast(corner3, Vector3.down, errorMargin);
+        bool grounded4 = Physics.Raycast(corner4, Vector3.down, errorMargin);
 
-        return (grounded1 || grounded2|| grounded3 || grounded4);
+        return (grounded1 || grounded2 || grounded3 || grounded4);
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -100,7 +102,6 @@ public class PlayerController : MonoBehaviour
         print(collider.gameObject.tag);
         if (collider.gameObject.tag == "Coin")
         {
-            print("Grabbing a Coin");
 
             GameManager.instance.IncreaseScore(1);
 
@@ -119,7 +120,6 @@ public class PlayerController : MonoBehaviour
 
         else if (collider.gameObject.tag == "Goal")
         {
-            print("next level");
             GameManager.instance.IncreaseLevel();
         }
     }
