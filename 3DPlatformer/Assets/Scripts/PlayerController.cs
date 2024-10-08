@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
         float distance = walkSpeed * Time.deltaTime;
         float horizontalAxis = Input.GetAxis("Horizontal");
         float verticalAxis = Input.GetAxis("Vertical");
-        //Valres da camera
         Vector3 CameraForward = cameraTransform.forward;
         Vector3 CameraRight = cameraTransform.right;
 
@@ -51,7 +50,6 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = (CameraForward * verticalAxis + CameraRight * horizontalAxis).normalized * distance;
 
-        Vector3 movement = new Vector3(horizontalAxis, 0f, verticalAxis).normalized * distance;
         Vector3 currentPosition = transform.position;
         Vector3 newPosition = currentPosition + direction;
 
