@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638614815438341272
-    m_Hash: 2169204065
+      ticks: 638634782368151061
+    m_Hash: 292634849
   m_LockFileStatus:
     m_FilePath: C:/Users/Phoen/Documents/GitHub/A3DPlatformer/3DPlatformer/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638614815438417412
-    m_Hash: 876855400
+      ticks: 638634782368221102
+    m_Hash: 172290716
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -118,9 +118,11 @@ m_ResolvedPackages:
     - 2.4.3
     - 2.4.4
     - 2.5.1
+    - 2.5.2
     compatible:
     - 2.4.4
     - 2.5.1
+    - 2.5.2
     recommended: 2.4.4
     deprecated: []
   dependencies: []

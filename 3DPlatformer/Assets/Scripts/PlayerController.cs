@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public int maxJumps = 2;
     public AudioSource coinAudioSource;
     public HudManager hud;
+    public Transform cameraTransform;
     float errorMargin = 0.01f;
     bool hasPressedJump = true;
     int jumpCounter = 0;
@@ -38,12 +39,28 @@ public class PlayerController : MonoBehaviour
         float distance = walkSpeed * Time.deltaTime;
         float horizontalAxis = Input.GetAxis("Horizontal");
         float verticalAxis = Input.GetAxis("Vertical");
+        //Valres da camera
+        Vector3 CameraForward = cameraTransform.forward;
+        Vector3 CameraRight = cameraTransform.right;
+
+        CameraForward.y = 0f;
+        CameraRight.y = 0f;
+
+        CameraForward.Normalize();
+        CameraRight.Normalize();
+
+        Vector3 direction = (CameraForward * verticalAxis + CameraRight * horizontalAxis).normalized * distance;
 
         Vector3 movement = new Vector3(horizontalAxis, 0f, verticalAxis).normalized * distance;
         Vector3 currentPosition = transform.position;
-        Vector3 newPosition = currentPosition + movement;
+        Vector3 newPosition = currentPosition + direction;
 
         rigidBody.MovePosition(newPosition);
+
+        if (direction != Vector3.zero)
+        {
+            transform.forward = direction;
+        }
     }
 
     void jumpHandler()
