@@ -7,11 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 25f;
     public float jumpSpeed = 7f;
+    public float coyoteTime = 0.2f;
+    public float jumpBufferTime = 0.2f;
     public int maxJumps = 2;
     public AudioSource coinAudioSource;
     public HudManager hud;
     public Transform cameraTransform;
     float errorMargin = 0.01f;
+    float coyoteTimeCounter;
+    float jumpBufferCounter;
     bool hasPressedJump = true;
     int jumpCounter = 0;
     Rigidbody rigidBody;
@@ -31,11 +35,13 @@ public class PlayerController : MonoBehaviour
         walkHandler();
 
         jumpHandler();
+
+        
     }
 
     void walkHandler()
     {
-
+            
         float distance = walkSpeed * Time.deltaTime;
         float horizontalAxis = Input.GetAxis("Horizontal");
         float verticalAxis = Input.GetAxis("Vertical");
@@ -68,16 +74,19 @@ public class PlayerController : MonoBehaviour
 
         if (jumpAxis > 0f)
         {
-            if (!hasPressedJump && (isGrounded || jumpCounter < maxJumps))
+            bool jumpLogic = (isGrounded || coyoteTimeCounter > 0f || jumpCounter < maxJumps);
+
+            jumpBufferCounter = jumpBufferTime;
+
+            if (!hasPressedJump && jumpLogic)
             {
-
-                Vector3 jumpVector = new Vector3(0F, jumpSpeed, 0f);
-
-                rigidBody.velocity += jumpVector;
+                executeJump();
 
                 jumpCounter += 1;
 
                 hasPressedJump = true;
+
+                coyoteTimeCounter = 0f;
 
             }
 
@@ -90,7 +99,27 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             jumpCounter = 0;
+            coyoteTimeCounter = coyoteTime;
+
+            if (jumpBufferCounter > 0f) 
+            {
+                executeJump();
+                jumpBufferCounter = 0f;
+            }
         }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        jumpBufferCounter -= Time.deltaTime;
+    }
+
+    void executeJump()
+    {
+        Vector3 jumpVector = new Vector3(0f, jumpSpeed, 0f);
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+        rigidBody.velocity += jumpVector;
     }
 
     bool checkGrounded()
@@ -109,7 +138,9 @@ public class PlayerController : MonoBehaviour
         bool grounded3 = Physics.Raycast(corner3, Vector3.down, errorMargin);
         bool grounded4 = Physics.Raycast(corner4, Vector3.down, errorMargin);
 
-        return (grounded1 || grounded2 || grounded3 || grounded4);
+        bool isGrounded = (grounded1 || grounded2 || grounded3 || grounded4);
+
+        return isGrounded;
     }
 
     private void OnTriggerEnter(Collider collider)
