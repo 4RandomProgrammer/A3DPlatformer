@@ -54,16 +54,16 @@ public class PlayerController : MonoBehaviour
         CameraForward.Normalize();
         CameraRight.Normalize();
 
-        Vector3 direction = (CameraForward * verticalAxis + CameraRight * horizontalAxis).normalized * distance;
+        Vector3 movement = (CameraForward * verticalAxis + CameraRight * horizontalAxis).normalized * distance;
 
         Vector3 currentPosition = transform.position;
-        Vector3 newPosition = currentPosition + direction;
+        Vector3 newPosition = currentPosition + movement;
 
         rigidBody.MovePosition(newPosition);
 
-        if (direction != Vector3.zero)
+        if (movement != Vector3.zero)
         {
-            transform.forward = direction;
+            transform.forward = movement;
         }
     }
 
