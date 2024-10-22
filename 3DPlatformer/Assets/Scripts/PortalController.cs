@@ -7,7 +7,6 @@ public class PortalScript : MonoBehaviour
     public Transform destination;
     public Vector3 playerSize;
     private PortalManager portalManager;
-    private bool recentlyTeleported;
 
     private void Start()
     {
@@ -18,12 +17,11 @@ public class PortalScript : MonoBehaviour
     { 
         bool canTeleport = portalManager.canTeleport;
 
-        if(collider.gameObject.tag == "Player" && canTeleport && !recentlyTeleported)
+        if(collider.gameObject.tag == "Player")
         {
             collider.gameObject.transform.position = destination.position + playerSize;
             print(collider.gameObject.transform.position);
             portalManager.canTeleport = false;
-            recentlyTeleported = true;
         }
     }
 
