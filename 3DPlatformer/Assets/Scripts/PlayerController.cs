@@ -145,7 +145,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        print(collider.gameObject.tag);
         if (collider.gameObject.tag == "Coin")
         {
 
