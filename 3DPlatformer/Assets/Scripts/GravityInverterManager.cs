@@ -6,7 +6,7 @@ public class GravityInverterManager : MonoBehaviour
 {
 
     // Força de gravidade padrão do jogador
-    public float gravityForce = -1000f;
+    public float gravityForce = -9.81f;
 
     // Tempo que a gravidade ficará invertida
     public float invertedGravityDuration = 5.0f;
@@ -31,16 +31,13 @@ public class GravityInverterManager : MonoBehaviour
 
     private IEnumerator InvertGravity()
     {
-        // Define a gravidade invertida para o jogador
         gravityInverted = true;
-        Vector3 invertedGravity = new Vector3(0, gravityForce, 0);
-        playerRigidbody.AddForce(invertedGravity, ForceMode.Impulse); // Inverte a direção da gravidade
+        Physics.gravity = new Vector3(0, -gravityForce, 0); // Inverte a direção da gravidade
 
         yield return new WaitForSeconds(invertedGravityDuration); // Espera pelo tempo de duração
 
         // Retorna a gravidade ao normal
-        Vector3 normalGravity = new Vector3(0, -gravityForce, 0);
-        playerRigidbody.AddForce(normalGravity, ForceMode.Impulse);
+        Physics.gravity = new Vector3(0, gravityForce, 0);
         gravityInverted = false;
     }
 }
