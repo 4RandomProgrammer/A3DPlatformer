@@ -12,14 +12,13 @@ public class GravityInverterManager : MonoBehaviour
     public float invertedGravityDuration = 5.0f;
 
     private bool gravityInverted = false;
-    private Rigidbody playerRigidbody;
+    public PlayerController playerRigidbody;
 
     private void OnTriggerEnter(Collider other)
     {
         // Verifica se o objeto que colidiu tem a tag "Player"
         if (other.CompareTag("Player"))
         {
-            playerRigidbody = other.GetComponent<Rigidbody>();
 
             if (playerRigidbody != null && !gravityInverted)
             {
@@ -33,11 +32,20 @@ public class GravityInverterManager : MonoBehaviour
     {
         gravityInverted = true;
         Physics.gravity = new Vector3(0, -gravityForce, 0); // Inverte a direção da gravidade
+        playerRigidbody.gravityDirection *= -1;
 
-        yield return new WaitForSeconds(invertedGravityDuration); // Espera pelo tempo de duração
+        // Espera pelo tempo de duração
+        if (invertedGravityDuration > 0)
+        {  
+            yield return new WaitForSeconds(invertedGravityDuration);
 
-        // Retorna a gravidade ao normal
-        Physics.gravity = new Vector3(0, gravityForce, 0);
-        gravityInverted = false;
+            // Retorna a gravidade ao normal
+            playerRigidbody.gravityDirection *= -1;
+            Physics.gravity = new Vector3(0, gravityForce, 0);
+            gravityInverted = false;
+        }
+         
+
+        
     }
 }
