@@ -32,7 +32,7 @@ public class GravityInverterManager : MonoBehaviour
     {
         gravityInverted = true;
         Physics.gravity = new Vector3(0, -gravityForce, 0); // Inverte a direção da gravidade
-        playerRigidbody.gravityDirection *= -1;
+        playerRigidbody.changeGravity();
 
         // Espera pelo tempo de duração
         if (invertedGravityDuration > 0)
@@ -40,12 +40,9 @@ public class GravityInverterManager : MonoBehaviour
             yield return new WaitForSeconds(invertedGravityDuration);
 
             // Retorna a gravidade ao normal
-            playerRigidbody.gravityDirection *= -1;
+            playerRigidbody.changeGravity();
             Physics.gravity = new Vector3(0, gravityForce, 0);
             gravityInverted = false;
         }
-         
-
-        
     }
 }

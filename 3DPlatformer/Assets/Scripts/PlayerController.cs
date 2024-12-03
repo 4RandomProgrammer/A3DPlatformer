@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public float coyoteTime = 0.2f;
     public float jumpBufferTime = 0.2f;
     public int maxJumps = 2;
-    public int gravityDirection = 1;
+    
     public AudioSource coinAudioSource;
     public HudManager hud;
     public Transform cameraTransform;
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     float jumpBufferCounter;
     bool hasPressedJump = true;
     int jumpCounter = 0;
+    int gravityDirection = 1;
 
     Rigidbody rigidBody;
     Collider collisionDetection;
@@ -39,6 +40,11 @@ public class PlayerController : MonoBehaviour
         jumpHandler();
 
         
+    }
+
+    public void changeGravity()
+    {
+        gravityDirection *= -1;
     }
 
     void walkHandler()
@@ -144,6 +150,8 @@ public class PlayerController : MonoBehaviour
 
         return isGrounded;
     }
+
+    
 
     private void OnTriggerEnter(Collider collider)
     {
