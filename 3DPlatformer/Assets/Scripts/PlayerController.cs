@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float coyoteTime = 0.2f;
     public float jumpBufferTime = 0.2f;
     public int maxJumps = 2;
+    
     public AudioSource coinAudioSource;
     public HudManager hud;
     public Transform cameraTransform;
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     float jumpBufferCounter;
     bool hasPressedJump = true;
     int jumpCounter = 0;
+    int gravityDirection = 1;
+
     Rigidbody rigidBody;
     Collider collisionDetection;
     
@@ -37,6 +40,11 @@ public class PlayerController : MonoBehaviour
         jumpHandler();
 
         
+    }
+
+    public void changeGravity()
+    {
+        gravityDirection *= -1;
     }
 
     void walkHandler()
@@ -117,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
     void executeJump()
     {
-        Vector3 jumpVector = new Vector3(0f, jumpSpeed, 0f);
+        Vector3 jumpVector = new Vector3(0f, jumpSpeed * gravityDirection, 0f);
         rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
         rigidBody.velocity += jumpVector;
     }
@@ -128,24 +136,25 @@ public class PlayerController : MonoBehaviour
         float sizeY = collisionDetection.bounds.size.y;
         float sizeZ = collisionDetection.bounds.size.z;
 
-        Vector3 corner1 = transform.position + new Vector3(sizeX / 2, -sizeY / 2 + errorMargin, sizeZ / 2);
-        Vector3 corner2 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + errorMargin, sizeZ / 2);
-        Vector3 corner3 = transform.position + new Vector3(sizeX / 2, -sizeY / 2 + errorMargin, -sizeZ / 2);
-        Vector3 corner4 = transform.position + new Vector3(-sizeX / 2, -sizeY / 2 + errorMargin, -sizeZ / 2);
+        Vector3 corner1 = transform.position + new Vector3(sizeX / 2, (-sizeY / 2 + errorMargin) * gravityDirection, sizeZ / 2);
+        Vector3 corner2 = transform.position + new Vector3(-sizeX / 2, (-sizeY / 2 + errorMargin) * gravityDirection, sizeZ / 2);
+        Vector3 corner3 = transform.position + new Vector3(sizeX / 2, (-sizeY / 2 + errorMargin) * gravityDirection, -sizeZ / 2);
+        Vector3 corner4 = transform.position + new Vector3(-sizeX / 2, (-sizeY / 2 + errorMargin) * gravityDirection, -sizeZ / 2);
 
-        bool grounded1 = Physics.Raycast(corner1, Vector3.down, errorMargin);
-        bool grounded2 = Physics.Raycast(corner2, Vector3.down, errorMargin);
-        bool grounded3 = Physics.Raycast(corner3, Vector3.down, errorMargin);
-        bool grounded4 = Physics.Raycast(corner4, Vector3.down, errorMargin);
+        bool grounded1 = Physics.Raycast(corner1, Vector3.down * gravityDirection, errorMargin);
+        bool grounded2 = Physics.Raycast(corner2, Vector3.down * gravityDirection, errorMargin);
+        bool grounded3 = Physics.Raycast(corner3, Vector3.down * gravityDirection, errorMargin);
+        bool grounded4 = Physics.Raycast(corner4, Vector3.down * gravityDirection, errorMargin);
 
         bool isGrounded = (grounded1 || grounded2 || grounded3 || grounded4);
 
         return isGrounded;
     }
 
+    
+
     private void OnTriggerEnter(Collider collider)
     {
-        print(collider.gameObject.tag);
         if (collider.gameObject.tag == "Coin")
         {
 
